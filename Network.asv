@@ -68,7 +68,7 @@ classdef Network < handle
             losses = zeros(1, epochs * floor(size(X, 2) / batch_size));
             iteration = 1;
             
-            for i = 1:epochs
+            for i = 1:length(epochs)
                 if batch_size == size(X, 2)
                     indices = 1:size(X, 2);
                 else
@@ -87,8 +87,7 @@ classdef Network < handle
                     losses(iteration) = self.loss.L;
                     iteration = iteration + 1;
                     self.differentiate_loss
-                    self.backward_pass(self.loss.dL_dX)
-                    self.update(alpha)
+                    self.backward_pass
                 end
             end
         end

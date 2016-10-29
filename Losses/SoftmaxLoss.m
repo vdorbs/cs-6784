@@ -10,7 +10,7 @@ classdef SoftmaxLoss < Loss
             self.X = X;
             Y = Y + size(X, 1) * (0:size(X, 2) - 1);
             self.Y = Y;
-            self.L = sum(-X(Y) + log(sum(exp(X))));
+            self.L = sum(-X(Y) + log(sum(exp(X)))) / size(X, 2);
             
             self.state = States.DERIVATIVE;
         end
