@@ -78,8 +78,8 @@ classdef Network < handle
                 end
                 
                 for j = 1:size(indices, 1)
-                    X_batch = X(:, indices);
-                    Y_batch = Y(indices);
+                    X_batch = X(:, indices(j, :));
+                    Y_batch = Y(indices(j, :));
                     
                     self.forward_pass(X_batch)
                     self.scores = self.layers(end).Y;

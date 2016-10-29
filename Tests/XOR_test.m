@@ -1,6 +1,6 @@
 function XOR_test
     close all
-    N = 1000;
+    N = 250;
     X = rand(N, 2);
     Y = 1 + arrayfun(@(x_1, x_2) xor(round(x_1), round(x_2)), X(:, 1), X(:, 2));
     data = [X Y];
@@ -8,9 +8,11 @@ function XOR_test
     batch_size = N;
     epochs = 1000;
     sigma = 1;
-    hidden_layer_size = 50;
+    hidden_layer_size = 10;
     layers = [ ...
         FullyConnectedLayer(hidden_layer_size, 2, sigma);
+        ReLULayer; 
+        FullyConnectedLayer(hidden_layer_size, hidden_layer_size, sigma);
         ReLULayer; 
         FullyConnectedLayer(2, hidden_layer_size, sigma)];
     loss = SoftmaxLoss;
