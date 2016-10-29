@@ -1,0 +1,2 @@
+classdef Network < handle
+end
