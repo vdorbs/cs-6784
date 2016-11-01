@@ -4,32 +4,53 @@ function XOR_test
     X = rand(N, 2);
     Y = 1 + arrayfun(@(x_1, x_2) xor(round(x_1), round(x_2)), X(:, 1), X(:, 2));
     data = [X Y];
-    alpha = 1e-2;
-    batch_size = N / 10;
-    epochs = 250;
+    alpha = 1e-3;
+    batch_size = N/50;
+    epochs = 200;
     sigma = 1;
     hidden_layer_size = 5;
     layers = [ ...
         FullyConnectedLayer(hidden_layer_size, 2, sigma);
         AbsLayer; 
-        FullyConnectedLayer(hidden_layer_size, hidden_layer_size, sigma);
+        DizzyLayer(hidden_layer_size, 2*pi);
         AbsLayer; 
-        FullyConnectedLayer(hidden_layer_size, hidden_layer_size, sigma);
+        DizzyLayer(hidden_layer_size, 2*pi);
         AbsLayer;
-        FullyConnectedLayer(hidden_layer_size, hidden_layer_size, sigma);
+        DizzyLayer(hidden_layer_size, 2*pi);
         AbsLayer; 
-        FullyConnectedLayer(hidden_layer_size, hidden_layer_size, sigma);
+        DizzyLayer(hidden_layer_size, 2*pi);
         AbsLayer; 
-        FullyConnectedLayer(hidden_layer_size, hidden_layer_size, sigma);
+        DizzyLayer(hidden_layer_size, 2*pi);
         AbsLayer;
-        FullyConnectedLayer(hidden_layer_size, hidden_layer_size, sigma);
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer;
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer;
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer;
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer; 
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer;
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer; 
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer; 
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer;
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer;
+        DizzyLayer(hidden_layer_size, 2*pi);
+        AbsLayer;
+        DizzyLayer(hidden_layer_size, 2*pi);
         AbsLayer;
         FullyConnectedLayer(2, hidden_layer_size, sigma)];
     loss = SoftmaxLoss;
     network = Network(layers, loss);
     losses = network.train(data, alpha, batch_size, epochs);
     figure
-    plot(losses)
+%     semilogy(losses)
+    plot(losses);
     title('Normalized loss by iteration')
     classifications = network.classify(data);
     show_classifications(X, classifications)
