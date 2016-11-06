@@ -3,12 +3,14 @@ classdef DizzyLayer < Layer
     properties
         W
         dL_dW
+        alpha_scale
     end
     
     methods
-        function dzyl = DizzyLayer(n, sigma)
-            dzyl.W = sigma * rand(1,n*(n-1)/2);
+        function dzyl = DizzyLayer(n, alpha_scale)
+            dzyl.W = 2 * pi * rand(1,n*(n-1)/2);
             dzyl.dL_dW = zeros(1, n*(n-1)/2);
+            dzyl.alpha_scale = alpha_scale;
             dzyl.state = States.FORWARD;
         end
         
@@ -84,7 +86,7 @@ classdef DizzyLayer < Layer
         function update(self, alpha)
             States.check_state(self.state, States.UPDATE)
             
-            self.W = self.W - alpha * self.dL_dW;
+            self.W = self.W - alpha * self.alpha_scale * self.dL_dW;
             
             self.dL_dW = [];
             self.dL_dX = [];

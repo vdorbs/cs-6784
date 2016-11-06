@@ -1,33 +1,31 @@
-classdef FullyConnectedLayer < Layer
+classdef BiasLayer < Layer
     properties
-        W
-        dL_dW
+        b
+        dL_db
         alpha_scale
     end
     
     methods
-        function fcl = FullyConnectedLayer(m, n, sigma, alpha_scale)
-            fcl.W = sigma * randn(m, n + 1);
-            fcl.alpha_scale = alpha_scale;
-            fcl.state = States.FORWARD;
+        function bl = BiasLayer(n, sigma, alpha_scale)
+            bl.b = sigma * randn(n, 1);
+            bl.alpha_scale = alpha_scale;
+            bl.state = States.FORWARD;
         end
-        
+       
         function forward_pass(self, X)
             States.check_state(self.state, States.FORWARD)
-            
-            X = [X; ones(1, size(X, 2))];
+           
             self.X = X;
-            self.Y = self.W * self.X;
+            self.Y = X + repmat(self.b, 1, size(X, 2));
             
             self.state = States.BACKWARD;
         end
-        
+       
         function backward_pass(self, dL_dY)
             States.check_state(self.state, States.BACKWARD)
             
-            self.dL_dX = self.W' * dL_dY;
-            self.dL_dX = self.dL_dX(1:end - 1, :);
-            self.dL_dW = dL_dY * self.X' / size(self.X, 2);
+            self.dL_dX = dL_dY;
+            self.dL_db = sum(dL_dY, 2) / size(self.X, 2);
             
             self.X = [];
             self.Y = [];
@@ -37,9 +35,9 @@ classdef FullyConnectedLayer < Layer
         function update(self, alpha)
             States.check_state(self.state, States.UPDATE)
             
-            self.W = self.W - alpha * self.alpha_scale * self.dL_dW;
+            self.b = self.b - alpha * self.alpha_scale * self.dL_db;
             
-            self.dL_dW = [];
+            self.dL_db = [];
             self.dL_dX = [];
             self.state = States.FORWARD;
         end

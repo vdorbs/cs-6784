@@ -61,14 +61,17 @@ classdef Network < handle
             self.state = States.FORWARD;
         end
         
-        function losses = train(self, data, alpha, batch_size, epochs)
+        function losses = train(self, data, alphas, batch_size)
+            epochs = length(alphas);
             X = data(:, 1:end - 1)';
             Y = data(:, end)';
             
             losses = zeros(1, epochs * floor(size(X, 2) / batch_size));
             iteration = 1;
             
-            for i = 1:epochs
+            epoch = 0;
+            for alpha = alphas
+                epoch = epoch + 1
                 if batch_size == size(X, 2)
                     indices = 1:size(X, 2);
                 else
@@ -94,7 +97,7 @@ classdef Network < handle
         end
         
         function scores = score(self, data)
-            self.train(data, 0, size(data, 1), 1);
+            self.train(data, 0, size(data, 1));
             scores = self.scores;
         end
         

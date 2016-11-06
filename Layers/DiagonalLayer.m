@@ -2,11 +2,15 @@ classdef DiagonalLayer < Layer
     properties
         Sigma
         dL_dSigma
+        lambda
+        alpha_scale
     end
     
     methods
-        function dl = DiagonalLayer(n, std_dev)
+        function dl = DiagonalLayer(n, std_dev, lambda, alpha_scale)
             dl.Sigma = 1 + std_dev * randn(n, 1);
+            dl.lambda = lambda;
+            dl.alpha_scale = alpha_scale;
             dl.state = States.FORWARD;
         end
        
@@ -34,7 +38,7 @@ classdef DiagonalLayer < Layer
         function update(self, alpha)
             States.check_state(self.state, States.UPDATE)
             
-            self.Sigma = self.Sigma - alpha * self.dL_dSigma;
+            self.Sigma = self.Sigma - alpha * self.alpha_scale * (self.dL_dSigma + self.lambda * (self.Sigma - ones(size(self.Sigma))));
             
             self.dL_dX = [];
             self.dL_dSigma = [];
