@@ -63,18 +63,4 @@ function XOR_test
     xlabel('x')
     ylabel('y')
     zlabel('z')
-    
-end
-
-function show_classifications(X, classifications)
-    falses = X(classifications == 1, :);
-    trues = X(classifications == 2, :);
-    figure
-    hold on
-    scatter(falses(:, 1), falses(:, 2), 'r')
-    scatter(trues(:, 1), trues(:, 2), 'g')
-    grid on
-    title('XOR Classifications')
-    legend('False', 'True')
-    hold off
 end
